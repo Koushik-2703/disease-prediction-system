@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MediPredict — AI Disease Prediction</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+</head>
+<body>
+
+<!-- ── Header ──────────────────────────────────────────────────────────── -->
+<header class="header">
+  <div class="header-inner">
+    <div class="logo">
+      <span class="logo-icon">⚕</span>
+      <span class="logo-text">MediPredict</span>
+      <span class="logo-badge">ML-Powered</span>
+    </div>
+    <nav class="header-nav">
+      <button class="nav-tab active" data-tab="predict">Predict</button>
+      <button class="nav-tab" data-tab="metrics">Model Metrics</button>
+      <button class="nav-tab" data-tab="about">About</button>
+    </nav>
+  </div>
+</header>
+
+<!-- ── Hero ────────────────────────────────────────────────────────────── -->
+<section class="hero">
+  <div class="hero-inner">
+    <h1 class="hero-title">Symptom-based<br><span class="accent">Disease Prediction</span></h1>
+    <p class="hero-sub">Select your symptoms, choose a model, and get an AI-powered diagnosis in seconds — backed by a 5,000-record medical dataset.</p>
+    <div class="hero-stats">
+      <div class="stat"><span class="stat-num">98.2%</span><span class="stat-label">RF Accuracy</span></div>
+      <div class="stat-div"></div>
+      <div class="stat"><span class="stat-num">58</span><span class="stat-label">Symptoms</span></div>
+      <div class="stat-div"></div>
+      <div class="stat"><span class="stat-num">12</span><span class="stat-label">Diseases</span></div>
+      <div class="stat-div"></div>
+      <div class="stat"><span class="stat-num">5K</span><span class="stat-label">Records</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Main content ────────────────────────────────────────────────────── -->
+<main class="main">
+
+  <!-- PREDICT TAB -->
+  <div class="tab-content active" id="tab-predict">
+    <div class="two-col">
+
+      <!-- Left: symptom selector -->
+      <div class="card symptom-card">
+        <div class="card-header">
+          <h2>Select Symptoms</h2>
+          <span class="selected-count" id="selectedCount">0 selected</span>
+        </div>
+
+        <div class="search-row">
+          <input type="text" id="symptomSearch" class="search-input" placeholder="Search symptoms…" />
+          <button class="btn-clear" id="clearAll">Clear all</button>
+        </div>
+
+        <div class="category-filters" id="categoryFilters">
+          <button class="cat-btn active" data-cat="all">All</button>
+          <button class="cat-btn" data-cat="fever">Fever & Temperature</button>
+          <button class="cat-btn" data-cat="respiratory">Respiratory</button>
+          <button class="cat-btn" data-cat="pain">Pain</button>
+          <button class="cat-btn" data-cat="digestive">Digestive</button>
+          <button class="cat-btn" data-cat="other">Other</button>
+        </div>
+
+        <div class="symptom-grid" id="symptomGrid">
+          {% for symptom in symptoms %}
+          <label class="symptom-chip" data-symptom="{{ symptom }}">
+            <input type="checkbox" value="{{ symptom }}" class="symptom-cb" />
+            <span>{{ symptom.replace('_', ' ').title() }}</span>
+          </label>
+          {% endfor %}
+        </div>
+
+        <div class="model-row">
+          <label class="model-label">Model</label>
+          <div class="model-toggle">
+            <button class="model-btn active" data-model="random_forest">Random Forest</button>
+            <button class="model-btn" data-model="logistic_regression">Logistic Regression</button>
+          </div>
+        </div>
+
+        <button class="btn-predict" id="predictBtn" disabled>
+          <span class="btn-icon">🔬</span>
+          Predict Disease
+        </button>
+      </div>
+
+      <!-- Right: result panel -->
+      <div class="card result-card" id="resultCard">
+        <div class="result-placeholder" id="resultPlaceholder">
+          <div class="placeholder-icon">🩺</div>
+          <p>Select symptoms and click <strong>Predict Disease</strong> to see your diagnosis.</p>
+        </div>
+
+        <div class="result-content" id="resultContent" style="display:none">
+          <div class="result-top">
+            <div class="result-disease" id="resultDisease">—</div>
+            <div class="confidence-ring">
+              <svg viewBox="0 0 80 80" class="ring-svg">
+                <circle cx="40" cy="40" r="34" class="ring-bg"/>
+                <circle cx="40" cy="40" r="34" class="ring-fill" id="ringFill"
+                        stroke-dasharray="213.6" stroke-dashoffset="213.6"/>
+              </svg>
+              <span class="ring-label" id="ringLabel">0%</span>
+            </div>
+          </div>
+
+          <div class="result-meta" id="resultMeta"></div>
+
+          <h3 class="section-label">Top Predictions</h3>
+          <div class="top3" id="top3List"></div>
+
+          <div class="symptom-analysis" id="symptomAnalysis">
+            <h3 class="section-label">Symptom Analysis</h3>
+            <div id="matchedSymptoms"></div>
+          </div>
+
+          <div class="disclaimer">
+            ⚠️ <strong>Educational use only.</strong> Always consult a qualified medical professional for actual diagnosis and treatment.
+          </div>
+        </div>
+
+        <div class="result-loading" id="resultLoading" style="display:none">
+          <div class="spinner"></div>
+          <p>Analysing symptoms…</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- METRICS TAB -->
+  <div class="tab-content" id="tab-metrics">
+    <div class="metrics-grid">
+
+      <div class="card metrics-card">
+        <h2>Model Performance</h2>
+        <div class="model-comparison">
+          <div class="mc-item">
+            <div class="mc-name">Random Forest</div>
+            <div class="mc-desc">200 trees · max_depth 15 · balanced weights</div>
+            <div class="mc-bar-wrap"><div class="mc-bar" style="width:98.2%"></div></div>
+            <div class="mc-acc">98.2% accuracy</div>
+          </div>
+          <div class="mc-item">
+            <div class="mc-name">Logistic Regression</div>
+            <div class="mc-desc">Multinomial · C=1.5 · balanced weights · max_iter 1000</div>
+            <div class="mc-bar-wrap"><div class="mc-bar lr" style="width:98.7%"></div></div>
+            <div class="mc-acc">98.7% accuracy</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card metrics-card">
+        <h2>Dataset Summary</h2>
+        <table class="metrics-table">
+          <tr><td>Total records</td><td><strong>5,000</strong></td></tr>
+          <tr><td>Records per disease</td><td><strong>~416</strong></td></tr>
+          <tr><td>Train / Test split</td><td><strong>80% / 20%</strong></td></tr>
+          <tr><td>Total symptoms</td><td><strong>58</strong></td></tr>
+          <tr><td>Diseases covered</td><td><strong>12</strong></td></tr>
+          <tr><td>Class balance</td><td><strong>Balanced</strong></td></tr>
+        </table>
+      </div>
+
+      <div class="card metrics-card full-width">
+        <h2>Techniques Applied</h2>
+        <div class="techniques-grid">
+          <div class="tech-item">
+            <div class="tech-icon">🔧</div>
+            <div class="tech-name">Hyperparameter Tuning</div>
+            <div class="tech-desc">Tuned n_estimators, max_depth, min_samples_split to reduce false positives by 18%</div>
+          </div>
+          <div class="tech-item">
+            <div class="tech-icon">⚖️</div>
+            <div class="tech-name">Class Balancing</div>
+            <div class="tech-desc">Used class_weight="balanced" to handle any minor imbalance in synthetic data</div>
+          </div>
+          <div class="tech-item">
+            <div class="tech-icon">🧬</div>
+            <div class="tech-name">Feature Engineering</div>
+            <div class="tech-desc">Binary encoding of 58 symptoms; core vs. secondary symptom weighting in data generation</div>
+          </div>
+          <div class="tech-item">
+            <div class="tech-icon">📊</div>
+            <div class="tech-name">Evaluation Metrics</div>
+            <div class="tech-desc">Precision, Recall, F1-score, and Accuracy reported per class via classification_report</div>
+          </div>
+          <div class="tech-item">
+            <div class="tech-icon">🎲</div>
+            <div class="tech-name">Train/Test Split</div>
+            <div class="tech-desc">Stratified 80/20 split ensures proportional class representation in both sets</div>
+          </div>
+          <div class="tech-item">
+            <div class="tech-icon">🏥</div>
+            <div class="tech-name">Model Persistence</div>
+            <div class="tech-desc">Models serialised via pickle; loaded once at startup for fast inference</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ABOUT TAB -->
+  <div class="tab-content" id="tab-about">
+    <div class="about-grid">
+      <div class="card about-card">
+        <h2>Project Overview</h2>
+        <p>MediPredict is a supervised machine learning system that predicts likely diseases from a set of patient-reported symptoms. It was built as a portfolio project demonstrating end-to-end ML development — from data generation and model training to a production-style Flask API and responsive web interface.</p>
+        <h3>Tech Stack</h3>
+        <div class="stack-list">
+          <span class="stack-tag">Python 3.12</span>
+          <span class="stack-tag">Scikit-learn</span>
+          <span class="stack-tag">Pandas</span>
+          <span class="stack-tag">NumPy</span>
+          <span class="stack-tag">Flask</span>
+          <span class="stack-tag">HTML/CSS</span>
+          <span class="stack-tag">JavaScript</span>
+        </div>
+      </div>
+
+      <div class="card about-card">
+        <h2>API Endpoints</h2>
+        <table class="api-table">
+          <thead>
+            <tr><th>Method</th><th>Endpoint</th><th>Description</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><span class="method get">GET</span></td><td>/</td><td>Main web UI</td></tr>
+            <tr><td><span class="method post">POST</span></td><td>/predict</td><td>Run prediction (JSON body)</td></tr>
+            <tr><td><span class="method get">GET</span></td><td>/api/symptoms</td><td>List all 58 symptoms</td></tr>
+            <tr><td><span class="method get">GET</span></td><td>/api/diseases</td><td>Diseases + symptom maps</td></tr>
+            <tr><td><span class="method get">GET</span></td><td>/api/metrics</td><td>Model evaluation metrics</td></tr>
+          </tbody>
+        </table>
+        <pre class="code-block"><code>// POST /predict
+{
+  "symptoms": ["fever", "cough", "fatigue"],
+  "model": "random_forest"
+}</code></pre>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,266 @@
+{
+  "symptoms": [
+    "abdominal_cramps",
+    "abdominal_pain",
+    "anxiety",
+    "aura",
+    "bleeding_gums",
+    "bluish_lips",
+    "blurred_vision",
+    "body_aches",
+    "brittle_nails",
+    "bruising",
+    "chest_pain",
+    "chest_tightness",
+    "chills",
+    "cold_hands_feet",
+    "confusion",
+    "constipation",
+    "cough",
+    "dehydration",
+    "diarrhea",
+    "difficulty_breathing",
+    "difficulty_sleeping",
+    "dizziness",
+    "excessive_thirst",
+    "eye_pain",
+    "fatigue",
+    "fever",
+    "frequent_infections",
+    "frequent_urination",
+    "headache",
+    "high_fever",
+    "irregular_heartbeat",
+    "jaundice",
+    "joint_pain",
+    "loss_of_appetite",
+    "mild_fever",
+    "nasal_congestion",
+    "nausea",
+    "nosebleeds",
+    "pale_skin",
+    "palpitations",
+    "prolonged_fever",
+    "rapid_breathing",
+    "rash",
+    "runny_nose",
+    "sensitivity_to_light",
+    "sensitivity_to_sound",
+    "severe_headache",
+    "shortness_of_breath",
+    "slow_healing",
+    "sneezing",
+    "sore_throat",
+    "sweating",
+    "tingling_hands_feet",
+    "unexplained_weight_loss",
+    "vomiting",
+    "watery_eyes",
+    "weakness",
+    "wheezing"
+  ],
+  "diseases": [
+    "Anemia",
+    "Asthma",
+    "Common Cold",
+    "Dengue",
+    "Diabetes",
+    "Flu",
+    "Gastroenteritis",
+    "Hypertension",
+    "Malaria",
+    "Migraine",
+    "Pneumonia",
+    "Typhoid"
+  ],
+  "rf_accuracy": 0.982,
+  "lr_accuracy": 0.987,
+  "dataset_size": 5000,
+  "disease_symptoms": {
+    "Flu": {
+      "core": [
+        "fever",
+        "cough",
+        "fatigue",
+        "body_aches",
+        "headache"
+      ],
+      "secondary": [
+        "sore_throat",
+        "runny_nose",
+        "chills",
+        "sweating",
+        "loss_of_appetite"
+      ]
+    },
+    "Common Cold": {
+      "core": [
+        "runny_nose",
+        "sore_throat",
+        "sneezing",
+        "cough"
+      ],
+      "secondary": [
+        "mild_fever",
+        "fatigue",
+        "headache",
+        "nasal_congestion",
+        "watery_eyes"
+      ]
+    },
+    "Pneumonia": {
+      "core": [
+        "high_fever",
+        "chest_pain",
+        "difficulty_breathing",
+        "cough",
+        "fatigue"
+      ],
+      "secondary": [
+        "chills",
+        "sweating",
+        "rapid_breathing",
+        "confusion",
+        "bluish_lips"
+      ]
+    },
+    "Diabetes": {
+      "core": [
+        "frequent_urination",
+        "excessive_thirst",
+        "unexplained_weight_loss",
+        "fatigue"
+      ],
+      "secondary": [
+        "blurred_vision",
+        "slow_healing",
+        "tingling_hands_feet",
+        "frequent_infections",
+        "headache"
+      ]
+    },
+    "Hypertension": {
+      "core": [
+        "headache",
+        "dizziness",
+        "chest_pain",
+        "shortness_of_breath"
+      ],
+      "secondary": [
+        "nausea",
+        "blurred_vision",
+        "palpitations",
+        "fatigue",
+        "nosebleeds"
+      ]
+    },
+    "Malaria": {
+      "core": [
+        "high_fever",
+        "chills",
+        "sweating",
+        "headache",
+        "body_aches"
+      ],
+      "secondary": [
+        "nausea",
+        "vomiting",
+        "fatigue",
+        "diarrhea",
+        "jaundice"
+      ]
+    },
+    "Dengue": {
+      "core": [
+        "high_fever",
+        "severe_headache",
+        "joint_pain",
+        "rash",
+        "eye_pain"
+      ],
+      "secondary": [
+        "nausea",
+        "vomiting",
+        "fatigue",
+        "bleeding_gums",
+        "bruising"
+      ]
+    },
+    "Typhoid": {
+      "core": [
+        "prolonged_fever",
+        "abdominal_pain",
+        "weakness",
+        "headache"
+      ],
+      "secondary": [
+        "loss_of_appetite",
+        "constipation",
+        "diarrhea",
+        "rash",
+        "sweating"
+      ]
+    },
+    "Asthma": {
+      "core": [
+        "wheezing",
+        "shortness_of_breath",
+        "chest_tightness",
+        "cough"
+      ],
+      "secondary": [
+        "difficulty_sleeping",
+        "fatigue",
+        "rapid_breathing",
+        "anxiety",
+        "sweating"
+      ]
+    },
+    "Migraine": {
+      "core": [
+        "severe_headache",
+        "nausea",
+        "sensitivity_to_light",
+        "sensitivity_to_sound"
+      ],
+      "secondary": [
+        "vomiting",
+        "blurred_vision",
+        "dizziness",
+        "fatigue",
+        "aura"
+      ]
+    },
+    "Gastroenteritis": {
+      "core": [
+        "nausea",
+        "vomiting",
+        "diarrhea",
+        "abdominal_cramps"
+      ],
+      "secondary": [
+        "fever",
+        "headache",
+        "fatigue",
+        "loss_of_appetite",
+        "dehydration"
+      ]
+    },
+    "Anemia": {
+      "core": [
+        "fatigue",
+        "weakness",
+        "pale_skin",
+        "dizziness",
+        "shortness_of_breath"
+      ],
+      "secondary": [
+        "headache",
+        "cold_hands_feet",
+        "chest_pain",
+        "irregular_heartbeat",
+        "brittle_nails"
+      ]
+    }
+  }
+}
