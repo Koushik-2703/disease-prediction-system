@@ -143,3 +143,4 @@ Flu · Common Cold · Pneumonia · Diabetes · Hypertension · Malaria · Dengue
 
 > **This system is for educational and portfolio demonstration purposes only.** It must not be used as a substitute for professional medical advice, diagnosis, or treatment. Always consult a qualified healthcare provider.
 ngdvchsdbcdsncms
+nbvghnbmhbmjb
